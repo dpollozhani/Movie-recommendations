@@ -38,26 +38,27 @@ def table_to_image(recommendations, no_of_cols=3):
     dfi.export(styled, 'data/recommendations/recommendations.png')
 
 def load_model():
-    model_path = f'similarity_models/similarities.pkl'
+    model_path = f'similarity_models/similarities.npz'
     try:
         if os.path.exists(model_path):
             with open(model_path, 'rb') as f:
-                model = pickle.load(f)
+                archive = np.load(f)
+                model = archive['arr_0']
                 f.close()
             return model
     except OSError as e:
         print('OS error:', e)
 
 def load_data():
-    all_titles_path = 'data/prepared/all_titles.csv'
-    own_titles_path = 'data/prepared/own_titles.csv'
+    all_titles_path = 'data/prepared/all_titles.gz'
+    own_titles_path = 'data/prepared/own_titles.gz'
     try:
         if os.path.exists(all_titles_path) and os.path.exists(own_titles_path):
             with open(all_titles_path, 'r') as f:
-                all_titles = pd.read_csv(all_titles_path, na_values='Unknown')
+                all_titles = pd.read_csv(all_titles_path, na_values='Unknown', compression='gzip')
                 f.close()
             with open(own_titles_path, 'r') as f:
-                own_titles = pd.read_csv(own_titles_path, na_values='Unknown')
+                own_titles = pd.read_csv(own_titles_path, na_values='Unknown', compression='gzip')
                 f.close()
             return all_titles, own_titles
     except OSError as e:

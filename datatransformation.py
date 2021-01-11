@@ -223,21 +223,21 @@ def prepare_model(df, cols_for_soup = ['genres', 'crewList', 'decadesSinceReleas
     all_titles = add_length_category(all_titles)
     all_titles = sanitize_strings(all_titles, cols_for_soup)
     all_titles = soup(all_titles, cols_for_soup)
-    all_titles.to_csv(f'data/prepared/all_titles.csv', index=False)
+    all_titles.to_csv(f'data/prepared/all_titles.gz', index=False, compression='gzip')
 
     own_titles = all_titles[all_titles['myRating'].notna()].copy()
     own_titles = own_titles.reset_index()
     own_titles = own_titles.rename(columns={'index': 'originalIndex'}) 
     own_titles = filter_rated_titles(own_titles, 'dateRated')
-    own_titles.to_csv('data/prepared/own_titles.csv', index=False)
+    own_titles.to_csv('data/prepared/own_titles.gz', index=False, compression='gzip')
 
     #Calculate cosine similarity between own titles and all titles
     #Only comparing rated movies to all movies, to avoid overloading memory
     similarities = similarity(own_titles['soup'], all_titles['soup'])
     
     #Storing similarity matrix to a pickle file to enable quicker usage later on
-    with open(f'similarity_models/similarities.pkl', 'wb') as f:
-        pickle.dump(similarities, f)
+    with open(f'similarity_models/similarities.npz', 'wb') as f:
+        np.savez_compressed(f, similarities)
         f.close()
     
     return similarities, all_titles, own_titles

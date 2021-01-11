@@ -1,3 +1,13 @@
+#Local
+data/cleaned
+data/raw
+data/prepared/*.csv
+executables/
+json/
+request_caches/
+test.py
+test2.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
