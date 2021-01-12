@@ -1,1 +1,1 @@
-web: sh setup.sh && streamlit run streamlit_app.py
+web: sh setup.sh && streamlit run panas-onic-2001.py
