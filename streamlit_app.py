@@ -14,6 +14,11 @@ def make_clickable_link(link):
     text = link.split('//')[1]
     return  f'<a target="_blank" href="{link}">{text}</a>'
 
+def link_to_slack():
+    link = 'https://app.slack.com/client/T01HT7UDBRS/C01HE9MG9JS'
+    text = 'Slack channel'
+    return f'<a target="_blank" href="{link}">{text}</a>'
+
 @st.cache
 def engine(title_type='movie'):
     
@@ -45,6 +50,8 @@ title_type = selection_map[selected_type]
 
 run = st.button('Get recommendations')
 
+slack_channel_text = '<p style="font_style:oblique;">Want to have a completely unnecessary discussion? Check out our ' + link_to_slack() + '.</p>'
+
 if run:
     with st.spinner('Take a sip of your macchiato while this remarkable beast of an engine does its work.'):
         #seed = random.randint(1,50)
@@ -52,4 +59,6 @@ if run:
         df = df.to_html(escape=False, index=False)
 
         st.write(df, unsafe_allow_html=True)
+        
+st.markdown(slack_channel_text, unsafe_allow_html=True)
 
