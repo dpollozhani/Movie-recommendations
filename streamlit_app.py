@@ -1,10 +1,10 @@
 import streamlit as st
 from recommendation import generate_recommendations
 import random
-from pyngrok import ngrok
+#from pyngrok import ngrok
 
-public_url = ngrok.connect('8501')
-print(public_url)
+#public_url = ngrok.connect('8501')
+#print(public_url)
 
 def make_clickable_title(df):
     text, link = df['Title'], df['IMDB page']
