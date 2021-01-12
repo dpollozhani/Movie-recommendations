@@ -11,21 +11,7 @@ import pickle
 import os
 import sys
 
-#### Helper functions ####
-def find_where_to_watch(movie_title, use_cache=False):
-    search_term = movie_title.lower().replace(' ', '-')
-    google_term = search_term.replace('-', '+')
-    search_path = f'https://decider.com/movie/{search_term}/'
-    google_path = f'https://google.com/search?q={google_term}'
-    
-    if use_cache:
-        requests_cache.install_cache('request_caches/decider_cache1', backend='sqlite', expire_after=3600*24*7)
-    response = requests.get(search_path)
-
-    if response.status_code == 200:
-        return search_path
-    return google_path    
-       
+#### Helper functions ####       
 def prettify(recommendations, no_of_cols=3):
     if not isinstance(recommendations ,str):
         first_cols = recommendations.columns[:min(recommendations.shape[1], no_of_cols)]
@@ -119,7 +105,6 @@ def generate_recommendations(title_type='movie', from_file=True, data=None, mode
     recommendations = recommendations.sort_values(by='IMDB rating', ascending=False)
     recommendations['IMDB rating'] = recommendations['IMDB rating'].apply(lambda x: round(x,2))
     recommendations['IMDB page'] = all_titles['tconst'].apply(lambda x: f'https://www.imdb.com/title/{x}/')
-    recommendations['Where to watch'] = [find_where_to_watch(title) for title in recommendations['Title']]
     recommendations.reset_index(drop=True, inplace=True)
     
     if explanation:
