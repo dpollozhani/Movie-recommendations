@@ -12,13 +12,14 @@ import os
 import sys
 
 #### Helper functions ####
-def find_where_to_watch(movie_title):
+def find_where_to_watch(movie_title, use_cache=False):
     search_term = movie_title.lower().replace(' ', '-')
     google_term = search_term.replace('-', '+')
     search_path = f'https://decider.com/movie/{search_term}/'
     google_path = f'https://google.com/search?q={google_term}'
     
-    requests_cache.install_cache('request_caches/decider_cache1', backend='sqlite', expire_after=3600*24*7)
+    if use_cache:
+        requests_cache.install_cache('request_caches/decider_cache1', backend='sqlite', expire_after=3600*24*7)
     response = requests.get(search_path)
 
     if response.status_code == 200:
